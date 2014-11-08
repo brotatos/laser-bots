@@ -5,6 +5,8 @@ Connect a resistor (around 10k is a good value, higher
 values gives higher readings) from pin 0 to GND. (see appendix of arduino notebook page 37 for schematics).
 
 ----------------------------------------------------
+          Laser
+ +3.3  o---->---o GND
 
            PhotoR     10K
  +5    o---/\/\/--.--/\/\/---o GND
