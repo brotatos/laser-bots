@@ -16,15 +16,15 @@ values gives higher readings) from pin 0 to GND. (see appendix of arduino notebo
 ----------------------------------------------------
 */
 
-int lightPin = 0;  //define a pin for Photo resistor
+// Analog pin.
+int lightPin = 0;
 
-void setup()
-{
-    Serial.begin(9600);  //Begin serial communcation
+void setup() {
+    Serial.begin(9600);
 }
 
-void loop()
-{
-   Serial.println(analogRead(lightPin)); //Write the value of the photoresistor to the serial monitor
-   delay(100); //short delay for faster response to light.
+void loop() {
+   // Write the value of the photoresistor to the serial monitor.
+   Serial.println(analogRead(lightPin));
+   delay(100); // Short delay for faster response to light.
 }
