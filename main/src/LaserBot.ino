@@ -5,6 +5,11 @@
     Term:           Fall 2014
 */
 
+/* Useful commands:
+
+   $ screen /dev/<arduino-port> <baud-rate> # for connecting for serial coms
+*/
+
 
 #include <Servo.h>
 
