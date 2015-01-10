@@ -16,18 +16,22 @@
 
 Servo servoLeft;
 Servo servoRight;
+int targetPin = 5;
 int laserPin = 9;
 int servoLeftPin = 10;
 int servoRightPin = 11;
 unsigned long laserTimer = 0;
 unsigned long servoTimer = 0;
-char input = '\0';
 
 
 void setup()
 {
     Serial.begin(9600);
     pinMode(laserPin, OUTPUT);
+    servoLeft.attach(servoLeftPin);
+    servoRight.attach(servoRightPin);
+    servoLeft.write(95);
+    servoRight.write(96);
 }
 
 
@@ -35,28 +39,39 @@ void setup()
 
 void loop()
 {
+    int photoResistor = analogRead(targetPin);
+    char input = '\0';
+    
+    Serial.println(photoResistor);
+    delay(200);
+    
+    // deactivate laser if it is on and 2 seconds have elapsed
+    if (digitalRead(laserPin) == HIGH)
+    {
+        if (millis() - laserTimer > 2000)
+        {
+            digitalWrite(laserPin, LOW);
+        }
+    }
+    
+    // stop servos if 100 ms have elapsed
+    if (servoTimer != 0)
+    {
+        if (millis() - servoTimer > 100)
+        {
+            stopServo();
+        }
+    }
+    
     if (Serial.available() > 0)
     {
         input = Serial.read();
-    
-        // deactivate laser if it is on and 2 seconds have elapsed
-        if (digitalRead(laserPin) == HIGH)
-        {
-            if (millis() - laserTimer > 2000)
-            {
-                digitalWrite(laserPin, LOW);
-            }
-        }
+        
         // activate laser and start timer if space key is pressed
-        else if (input == ' ')
+        if (input == ' ')
         {
             laserTimer = millis();
             digitalWrite(laserPin, HIGH);
-        }
-        // stop servos if 100 ms have elapsed
-        else if (millis() - servoTimer > 100)
-        {
-            stopServo();
         }
         // start servos and timer
         else
@@ -64,9 +79,9 @@ void loop()
             servoTimer = millis();
             startServo(input);
         }
+        
+        emptyStream();
     }
-
-    emptyStream();
 }
 
 
@@ -74,9 +89,6 @@ void loop()
 
 void startServo(char dir)
 {
-    servoLeft.attach(servoLeftPin);
-    servoRight.attach(servoRightPin);
-    
     switch (dir)
     {
         // go forward
@@ -103,8 +115,8 @@ void startServo(char dir)
 
 void stopServo()
 {
-    servoLeft.detach();
-    servoRight.detach();   
+    servoLeft.write(95);
+    servoRight.write(96); 
 }
 
 
